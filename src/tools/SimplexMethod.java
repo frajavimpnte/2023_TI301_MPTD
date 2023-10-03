@@ -52,18 +52,91 @@ public class SimplexMethod {
         }
         return index;
     } 
-    public void simplex(){
-      //  System.out.println(pl[0][(numeroChido)]);
-      System.out.println(numeroChido());
+    
+    private int quotientTest(int cPiv) {
+        // encontar el primer valor positivo
+        // usando la colunma pivote
+        int index = -1;
+        float val = 0.0f;
+        for (int i=1; i < pl.length; i++) {
+            pl[i][pl[0].length-1] = pl[i][pl[0].length-2]/pl[i][cPiv];
+            //System.out.println("pc[i]:"+ pc[i]);
+            if (pl[i][pl[0].length-1] > 0.0f) {
+                index = i;
+                val = pl[i][pl[0].length-1];
+                break;
+            }    
+        }
+        // no valor negativo terminar
+        if (index == -1) return -1;
+        
+        // econtrar el valor positivo mas pequeño
+        for (int i=index+1; i < pl.length; i++) {
+            pl[i][pl[0].length-1] = pl[i][pl[0].length-2]/pl[i][cPiv];
+            if (pl[i][pl[0].length-1] > 0.0f && pl[i][pl[0].length-1] < val ) {
+                index = i;
+                val = pl[i][pl[0].length-1];               
+            }    
+        }
+        return index;
     }
     
+    private void rowCompute(int rPiv, int cPiv) {
+        
+        // crear el renglon pivote
+        float div = pl[rPiv][cPiv];
+        for (int j = 0; j < pl[0].length; j++) {
+            pl[rPiv][j]  /= div;
+        }
+        // realizar la eliminación de columna pivote
+        for (int i=0; i < pl.length; i++) {
+            if (i != rPiv ) {
+                float factor = -pl[i][cPiv];
+                for (int j=0; j < pl[0].length; j++) {
+                    pl[i][j] += (factor* pl[rPiv][j]);
+                }
+            }
+        }
+    }
+    public void simplex(){
+      // optimallity
+      int rPiv=-1;
+      int cPiv=-1;
+      while ( (cPiv = numeroChido()) != -1 ) {
+            rPiv = quotientTest(cPiv);
+            rowCompute(rPiv, cPiv);
+      }
+      /*
+      int cPiv = numeroChido();
+      System.out.println("colPiv: " + cPiv);
+      
+      // prueba del cociente &  renglon pivote
+      int rPiv = quotientTest(cPiv);
+      System.out.println("rowPiv: " + rPiv);
+
+      // operaciones renglon columna
+      rowCompute(rPiv, cPiv);
+      
+      // columna pivote
+      cPiv = numeroChido();
+      System.out.println("colPiv: " + cPiv);
+      
+      // prueba del cociente &  renglon pivote
+      rPiv = quotientTest(cPiv);
+      System.out.println("rowPiv: " + rPiv);
+      // operaciones renglon columna
+      rowCompute(rPiv, cPiv);
+      */
+    }
+   
     public void print() {
         for (int i = 0; i <= pl.length -1; i++ ) {
             for (int j = 0; j < pl[0].length; j++) {
-                System.out.printf("%+5.3f  ", pl[i][j]);
+                System.out.printf("%+05.3f  ", pl[i][j]);
             }
             System.out.println("");
         }
+        System.out.println("");
     }
     
 }
