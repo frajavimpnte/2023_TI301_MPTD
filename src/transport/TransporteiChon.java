@@ -54,7 +54,7 @@ public class TransporteiChon {
         System.out.println("Tabla de costos");
         for (int i = 0; i < originPoint; i++) {
             for (int j = 0; j < destinyPoint; j++) {
-                System.out.print(cost[i][j]);
+                System.out.print(cost[i][j] + " ");
             }
             System.out.println("");
         }
