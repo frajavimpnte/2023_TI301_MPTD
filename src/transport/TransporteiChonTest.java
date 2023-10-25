@@ -22,5 +22,8 @@ public class TransporteiChonTest {
        tc.setDestinyAmount(destiny);
        
        tc.print();
+       
+       tc.sfbNE();
+       tc.print();
     }
 }
